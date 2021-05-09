@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "ghost-triggerbotter",
+  "version": "${version}",
+
+  "name": "GhostTriggerbotter",
+  "description": "Adds a Triggerbot which is not detectable to minecraft",
+  "authors": [
+    "Lasnik"
+  ],
+  "contact": {
+    "email": "lasnikprogram@gmail.com",
+    "discord": "Lasnik#0294",
+    "github" : "https://github.com/lasnikprogram",
+    "website" : "lasnik.github.io",
+    "sources": "https://github.com/lasnikprogram/GhostTriggerbotter",
+    "issues": "https://github.com/lasnikprogram/GhostTriggerbotter/issues"
+  },
+
+  "license": "GPLv3",
+  "icon": "assets/ghost-triggerbotter/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "io.github.lasnik.GhostTriggerbotter"
+    ],
+    "modmenu": [
+      "io.github.lasnik.util.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "ghost-triggerbotter.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "custom": {
+    "modmenu:clientsideOnly": true
+  }
+}
