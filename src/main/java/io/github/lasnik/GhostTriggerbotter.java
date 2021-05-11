@@ -1,12 +1,15 @@
 package io.github.lasnik;
 
-import io.github.lasnik.util.Configuration;
+import io.github.lasnik.config.Configuration;
 import io.github.lasnik.util.KeyBindings;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.example.ExampleConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
+import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
+import net.minecraft.entity.EntityType;
 
 public class GhostTriggerbotter implements ClientModInitializer {
     public KeyBindings keyBindings = new KeyBindings();
@@ -26,7 +29,7 @@ public class GhostTriggerbotter implements ClientModInitializer {
         }
         instance = this;
 
-        AutoConfig.register(Configuration.class, GsonConfigSerializer::new);
+        AutoConfig.register(Configuration.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
         config = AutoConfig.getConfigHolder(Configuration.class).getConfig();
 
         try {

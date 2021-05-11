@@ -1,6 +1,6 @@
 package io.github.lasnik;
 
-import io.github.lasnik.util.Configuration;
+import io.github.lasnik.config.OptionConfiguration;
 import io.github.lasnik.util.KeyBindings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -10,12 +10,13 @@ import net.minecraft.util.hit.EntityHitResult;
 public class TriggerBot {
     private MinecraftClient mc = MinecraftClient.getInstance();
     private KeyBindings keyBindings = GhostTriggerbotter.getInstance().keyBindings;
-    private Configuration config = GhostTriggerbotter.getInstance().config;
+    private OptionConfiguration optionConfig = GhostTriggerbotter.getInstance().config.optionConfiguration;
+    private int delay;
 
     private boolean enabled = true;
 
     public void onTick() {
-        if (!config.enabled || mc.crosshairTarget == null || !(mc.crosshairTarget instanceof EntityHitResult)) {
+        if (!optionConfig.enabled || mc.crosshairTarget == null || !(mc.crosshairTarget instanceof EntityHitResult) || !mc.player.isAlive()) {
             return;
         }
 
@@ -27,27 +28,33 @@ public class TriggerBot {
 
             Entity entity = ((EntityHitResult) mc.crosshairTarget).getEntity();
 
-            switch (config.hitDelayType) {
-                case NEW:
-                    attackWithNewHitDelay(entity);
-                    break;
-                case OLD:
-                    attackWithOldHitDelay(entity);
-                    break;
+            if (!entity.isAlive()) {
+                return;
+            }
+
+            if (optionConfig.newHitDelayType) {
+                attackWithNewHitDelay(entity);
+            } else {
+                attackWithOldHitDelay(entity);
+
             }
         }
     }
 
     private void attackWithNewHitDelay(Entity entity) {
         if (mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1f) {
-            // TODO: Switch to most damage dealing weapon
             mc.interactionManager.attackEntity(mc.player, entity);
             mc.player.swingHand(Hand.MAIN_HAND);
         }
     }
 
     private void attackWithOldHitDelay(Entity entity) {
-        mc.interactionManager.attackEntity(mc.player, entity);
-        mc.player.swingHand(Hand.MAIN_HAND);
+        delay++;
+        int reqDelay = Math.round(20 / optionConfig.clicksPerSecond);
+        if (delay > reqDelay || reqDelay == 0) {
+            mc.interactionManager.attackEntity(mc.player, entity);
+            mc.player.swingHand(Hand.MAIN_HAND);
+            delay = 0;
+        }
     }
 }

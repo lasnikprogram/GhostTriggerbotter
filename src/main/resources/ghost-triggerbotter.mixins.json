@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "ClientWorldMixin"
+    "ClientWorldMixin",
+    "OptionsScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
