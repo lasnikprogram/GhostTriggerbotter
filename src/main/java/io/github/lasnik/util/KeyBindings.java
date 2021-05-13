@@ -7,14 +7,14 @@ import org.lwjgl.glfw.GLFW;
 
 public class KeyBindings {
     public KeyBinding keyBindingToggle = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.ghost_triggerbotter.toggle",
+            TranslationKeyHelper.keyBindKey + "toggle",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_R,
-            "key.categories.ghost_triggerbotter"));
+            TranslationKeyHelper.keyBindCategory));
 
     public KeyBinding keyBindingHold = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.ghost_triggerbotter.hold",
+            TranslationKeyHelper.keyBindKey + "hold",
             InputUtil.Type.MOUSE,
             GLFW.GLFW_MOUSE_BUTTON_LEFT,
-            "key.categories.ghost_triggerbotter"));
+            TranslationKeyHelper.keyBindCategory));
 }

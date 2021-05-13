@@ -1,6 +1,8 @@
 package io.github.lasnik;
 
-import io.github.lasnik.config.OptionConfiguration;
+import io.github.lasnik.config.Configuration;
+import io.github.lasnik.config.ConfigurationOptions;
+import io.github.lasnik.util.HitDelayType;
 import io.github.lasnik.util.KeyBindings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -10,13 +12,13 @@ import net.minecraft.util.hit.EntityHitResult;
 public class TriggerBot {
     private MinecraftClient mc = MinecraftClient.getInstance();
     private KeyBindings keyBindings = GhostTriggerbotter.getInstance().keyBindings;
-    private OptionConfiguration optionConfig = GhostTriggerbotter.getInstance().config.optionConfiguration;
+    private ConfigurationOptions configurationOptions = GhostTriggerbotter.getInstance().configurationOptions;
     private int delay;
 
     private boolean enabled = true;
 
     public void onTick() {
-        if (!optionConfig.enabled || mc.crosshairTarget == null || !(mc.crosshairTarget instanceof EntityHitResult) || !mc.player.isAlive()) {
+        if (!configurationOptions.enabled || mc.crosshairTarget == null || !(mc.crosshairTarget instanceof EntityHitResult) || !mc.player.isAlive()) {
             return;
         }
 
@@ -32,11 +34,10 @@ public class TriggerBot {
                 return;
             }
 
-            if (optionConfig.newHitDelayType) {
+            if (configurationOptions.hitDelayType == HitDelayType.NEW) {
                 attackWithNewHitDelay(entity);
             } else {
                 attackWithOldHitDelay(entity);
-
             }
         }
     }
@@ -50,7 +51,7 @@ public class TriggerBot {
 
     private void attackWithOldHitDelay(Entity entity) {
         delay++;
-        int reqDelay = Math.round(20 / optionConfig.clicksPerSecond);
+        int reqDelay = Math.round(20 / configurationOptions.clicksPerSecond);
         if (delay > reqDelay || reqDelay == 0) {
             mc.interactionManager.attackEntity(mc.player, entity);
             mc.player.swingHand(Hand.MAIN_HAND);
